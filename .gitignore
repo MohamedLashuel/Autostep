@@ -1,7 +1,7 @@
 .venv
 __pycache__
 *.mp3
-*.wav
 *.ogg
 *.old
 pretrained_models
+TurnOffTheLights
