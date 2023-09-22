@@ -3,4 +3,5 @@
 *.wav
 *.ogg
 *.ssc
+*.old
 pretrained_models
