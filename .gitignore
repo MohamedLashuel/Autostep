@@ -5,3 +5,8 @@ __pycache__
 *.old
 pretrained_models
 TurnOffTheLights
+bin
+lib*
+include
+pyvenv.cfg
+*.txt
