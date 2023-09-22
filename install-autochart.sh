@@ -1,0 +1,1 @@
+pip install --force-reinstall ../Autochart/dist/*.whl

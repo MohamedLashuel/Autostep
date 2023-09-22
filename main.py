@@ -18,8 +18,7 @@ def s2b(samples):
 def getNotes(threshold = 0, distance = 0):
     return s2b(getPeaks(threshold, distance)) * (2 ** 2)
 
-fp = getPeaks(1000, 500)
-fb = s2b(fp)
-fn = fb * (2 ** 2)
+fp = getPeaks(3000, 500)
 
-code.interact(local = globals())
+import array2chart
+array2chart.arrayToChart(fp, bpm, sample_rate)
