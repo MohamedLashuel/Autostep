@@ -22,9 +22,9 @@ fp = getPeaks(2000, 6000)
 import array2chart
 array2chart.arrayToChart(fp, bpm, sample_rate)
 
-import johnny_test
-print(johnny_test.optimize(
-    johnny_test.thirtysecondtest,
+import test
+print(test.optimize(
+    test.thirtysecondtest,
     getPeaks,
     bpm,
     sample_rate,
