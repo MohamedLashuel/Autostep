@@ -1,7 +1,7 @@
 from autochart.inout import writeTxt, convertToSSC, injectSSCToChart
 import numpy as np
 
-DIVISION = 16
+DIVISION = 32
 
 def makeChartCode(beats):
 	beats = list(set(beats))

@@ -1,4 +1,3 @@
-import code
 import numpy as np
 from scipy.io import wavfile
 from scipy import signal
@@ -18,7 +17,17 @@ def s2b(samples):
 def getNotes(threshold = 0, distance = 0):
     return s2b(getPeaks(threshold, distance)) * (2 ** 2)
 
-fp = getPeaks(3000, 500)
+fp = getPeaks(2000, 6000)
 
 import array2chart
 array2chart.arrayToChart(fp, bpm, sample_rate)
+
+import johnny_test
+print(johnny_test.optimize(
+    johnny_test.thirtysecondtest,
+    getPeaks,
+    bpm,
+    sample_rate,
+    ([(x + 1) * 1000 for x in range(6)],
+    [(x + 1) * 500 for x in range(10)])
+))
