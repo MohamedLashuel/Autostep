@@ -10,6 +10,6 @@ print(test.optimize(
     song,
     test.thirtysecondtest,
     scipyPeaks,
-    (range(1000, 6001, 1000),
-    range(500,5001,500))
+    range(1000, 6001, 1000),
+    range(500,5001,500)
 ))

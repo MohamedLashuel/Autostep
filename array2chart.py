@@ -2,7 +2,7 @@ from typing import Iterable
 from autochart.inout import writeTxt, convertToSSC, injectSSCToChart
 import numpy as np
 
-from obj import *
+from obj import Song
 
 DIVISION = 32
 
@@ -26,7 +26,7 @@ def injectChartCode(chart_code, destination) -> None:
 	convertToSSC('code.txt', 'chart.txt')
 	injectSSCToChart('chart.txt', destination, 1)
 
-def arrayToChart(peaks: list, song: Song) -> None:
+def arrayToChart(peaks: Iterable[int], song: Song) -> None:
 	num_beats = peaks / song.samplerate / 60 * song.bpm * DIVISION / 4
 	rounded_beats = np.int16(np.round(num_beats))
 	chart_code = makeChartCode(rounded_beats)
