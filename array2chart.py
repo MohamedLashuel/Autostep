@@ -1,7 +1,7 @@
 from typing import Iterable
 from autochart.inout import writeTxt, convertToSSC, injectSSCToChart
 
-from obj import *
+from obj import Song
 
 DIVISION = 32
 

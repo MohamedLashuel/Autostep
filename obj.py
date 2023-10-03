@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.io import wavfile
-from typing import Iterable, Callable
 
 class Song:
     def __init__(self, filepath: str, bpm: float):
@@ -9,7 +8,6 @@ class Song:
         self.filepath = filepath
 
         self.data = averageChannels(self.data)
-
         self.bpm = bpm
 
 def averageChannels(data: np.ndarray) -> np.ndarray:
