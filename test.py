@@ -2,11 +2,11 @@ from array2chart import *
 import itertools as it
 from typing import Callable, Iterable
 
-def readCodeTxt(filename : str = 'code.txt') -> str:
+def readCodeTxt(filename: str = 'code.txt') -> str:
     with open(filename) as f:
         return f.read()
 
-def runTest(song : Song, peaks : list, grade_func = Callable, 
+def runTest(song: Song, peaks: np.ndarray, grade_func = Callable, 
             *params, print_params = False):
     arrayToChart(peaks, song)
     # Print with tab to make grade results visible
@@ -19,7 +19,7 @@ def runTest(song : Song, peaks : list, grade_func = Callable,
 
 # Return the set of parameters that yields the lowest score (lower = better)
 
-def optimize(song : Song, grade_func : Callable, detect_func : Callable, 
+def optimize(song: Song, grade_func: Callable, detect_func: Callable, 
              param_values: tuple[Iterable[int]]):
     
     for tup in param_values: assert len(tup)
@@ -38,7 +38,7 @@ def optimize(song : Song, grade_func : Callable, detect_func : Callable,
     return min_combo
 
 # Tests take in one parameter, the code to be analyzed
-def thirtysecondtest(code):
+def thirtysecondtest(code: str) -> int:
     sixteenths = 0
     thirtyseconds = 0
 
