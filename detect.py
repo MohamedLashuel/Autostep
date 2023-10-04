@@ -2,16 +2,19 @@ from obj import *
 from scipy import signal
 import librosa
 import aubio
+from typing import Optional
 
 # Detection functions take the song as the first parameter
 # and all parameters after must be integers
 # And must return a ndarray of samples
 
 # Performance not that good
-def scipyPeaks(song: Song, threshold: int = None,
-	 distance: int = None) -> np.ndarray:
-	return signal.find_peaks(song.data, 
-		threshold = threshold, distance = distance)[0]
+def scipyPeaks(
+	song: Song,
+	threshold: Optional[int] = None,
+	distance: Optional[int] = None
+) -> np.ndarray:
+	return signal.find_peaks(song.data, threshold = threshold, distance = distance)[0]
 
 # Will basically only generate 16th notes, not 4th or 8th.
 # Irredeemable
