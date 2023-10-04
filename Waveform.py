@@ -26,7 +26,7 @@ class Waveform:
 	def slice_seconds(self, begin: int, end: int) -> 'Waveform':
 		return Waveform(self.sample_rate, self.data[begin * self.sample_rate : end * self.sample_rate])
 	
-	def lowpass(self, freq: int, order: int) -> 'Waveform':
+	def lowpass(self, cutoff_freq_hz: int, order: int) -> 'Waveform':
 		b, a = signal.butter(order, freq / self.nyquist_freq, btype='lowpass')
 		return Waveform(self.sample_rate, signal.filtfilt(b, a, self.data, axis=0))
 	
