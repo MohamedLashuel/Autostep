@@ -1,19 +1,15 @@
-from numpy import \
-	float32 as np_float32, \
-	int16 as np_int16
+import numpy as np
+import sounddevice as sd
 from numpy.typing import NDArray
 from scipy.io import wavfile
 from scipy import signal
-from sounddevice import \
-	play as sd_play, \
-	stop as sd_stop
 
 class Waveform:
 	@staticmethod
 	def from_file(filename: str) -> 'Waveform':
 		return Waveform(*wavfile.read(filename))
 
-	def __init__(self, sample_rate: int, data: NDArray[np_float32]):
+	def __init__(self, sample_rate: int, data: NDArray[np.float32]):
 		self.sample_rate, self.data = sample_rate, data
 		self.nyquist_freq = 0.5 * self.sample_rate
 	
@@ -40,10 +36,10 @@ class Waveform:
 		return Waveform(self.sample_rate, signal.filtfilt(b, a, self.data, axis=0))
 
 	def save_to_file(self, filename: str) -> None:
-		wavfile.write(filename, self.sample_rate, np_int16(self.data))
+		wavfile.write(filename, self.sample_rate, np.int16(self.data))
 
 	def play(self) -> None:
-		sd_play(self.data, self.sample_rate)
+		sd.play(self.data, self.sample_rate)
 
 	def stop(self) -> None:
-		sd_stop()
+		sd.stop()
