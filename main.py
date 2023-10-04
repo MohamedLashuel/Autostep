@@ -5,12 +5,6 @@ from detect import *
 
 np.set_printoptions(precision=3)
 
-song = Song('test_audio/drums.wav', bpm = 128)
+song = Song('test_audio/drums.wav', bpm = 128, offset = -0.095)
 
-print(test.optimize(
-    song,
-    test.thirtysecondtest,
-    aubioPeaks,
-    ([2 ** (i + 8) for i in range(11)],
-     [200])
-))
+code.interact(local = globals())
