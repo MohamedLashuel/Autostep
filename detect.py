@@ -16,7 +16,7 @@ def scipyPeaks(
 ) -> np.ndarray:
 	return signal.find_peaks(song.data, threshold = threshold, distance = distance)[0]
 
-# Will basically only generate 16th notes, not 4th or 8th.
+# Will basically generate no 16th notes
 # Irredeemable
 def librosaPeaks(song: Song, tightness: int = 100, 
 		hop_length: int = 512, trim: bool = True) -> np.ndarray:
