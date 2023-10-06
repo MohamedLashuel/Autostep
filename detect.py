@@ -49,4 +49,6 @@ def aubioPeaks(song: Song, fft: int, hop: int, mode: int) -> np.ndarray:
 
 	return np.int32(onsets)
 
-# def vortexPeaks(song: Song) -> np.ndarray:
+def overThresholdPeaks(song: Song, threshold: int) -> np.ndarray:
+	return np.where(song.data > threshold)[0]
+
