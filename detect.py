@@ -3,6 +3,7 @@ from scipy import signal
 import librosa
 import aubio
 from typing import Optional
+import muspy
 
 # Detection functions take the song as the first parameter
 # and all parameters after must be integers
@@ -56,3 +57,5 @@ def aubioPeaks(song: Song, fft: int, hop: int, mode: int) -> np.ndarray:
 def overThresholdPeaks(song: Song, threshold: int) -> np.ndarray:
 	return np.where(song.data > threshold)[0]
 
+def muspyPeaks(song: Song) -> np.ndarray:
+	pass

@@ -25,8 +25,8 @@ def injectChartCode(chart_code, destination) -> None:
 	convertToSSC('code.txt', 'chart.txt')
 	injectSSCToChart('chart.txt', destination, 1)
 
-def arrayToChart(peaks: np.ndarray, song: Song) -> None:
+def arrayToChart(peaks: np.ndarray, song: Song, filepath = 'TurnOffTheLights.ssc') -> None:
 	num_beats = (peaks / song.samplerate + song.offset) / 60 * song.bpm * DIVISION / 4
 	rounded_beats = np.int16(np.round(num_beats))
 	chart_code = makeChartCode(rounded_beats)
-	injectChartCode(chart_code, 'TurnOffTheLights.ssc')
+	injectChartCode(chart_code, filepath)
