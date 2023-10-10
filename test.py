@@ -50,4 +50,3 @@ def thirtysecondtest(code: str) -> int:
     print(f'Thirtyseconds: {thirtyseconds}')
 
     return thirtyseconds
-
