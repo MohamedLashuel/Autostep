@@ -1,12 +1,15 @@
-from array2chart import *
-import code
-from detect import *
+from code import interact
+from Song import Song
+import numpy as np
 
 np.set_printoptions(precision=3)
 
 song = Song('drums.wav', bpm=128, offset = -0.095)
 
-low_song = audiopass(song, 'lowpass', 300, 1, 'low.wav')
-high_song = audiopass(song, 'highpass', 300, 1, 'high.wav')
+low_song = song.filter('low', 300, 1)
+low_song.save_to_file('drums_lowpass.wav')
 
-code.interact(local=globals())
+high_song = song.filter('high', 300, 1)
+high_song.save_to_file('drums_highpass.wav')
+
+interact(local=globals())

@@ -1,7 +1,4 @@
-import subprocess
+from subprocess import check_output
 
-tempo = float(subprocess.check_output("aubio tempo drums.wav", shell=True, text=True).replace(" bpm", ""))
-
-print(tempo)
-
-
+def aubio_tempo(song_filename: str):
+	return int(float(check_output(f"aubio tempo {song_filename}", shell=True, text=True).replace(" bpm", "")))
