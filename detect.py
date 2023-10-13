@@ -1,4 +1,4 @@
-from Song import *
+from song import *
 from scipy import signal
 import librosa
 import aubio

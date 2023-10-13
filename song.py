@@ -1,10 +1,7 @@
-import numpy as np
-from scipy.io import wavfile
-from scipy import signal
 from copy import deepcopy
 from typing import Literal
-from Waveform import Waveform
-from audio_tempo_cli import aubio_tempo
+from waveform import Waveform
+from audio_tempo import aubio_tempo
 
 class Song:
 	def __init__(self, filepath: str, offset: float):
@@ -16,7 +13,7 @@ class Song:
 	def sample_rate(self) -> int: return self.waveform.sample_rate
 	def data(self) -> int: return self.waveform.data
 	
-	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int], order: int) -> 'Song':
+	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int, int], order: int) -> 'Song':
 		new_song = deepcopy(self)
 		match filter_type:
 			case 'low':
