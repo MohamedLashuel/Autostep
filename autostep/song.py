@@ -1,13 +1,11 @@
 from copy import deepcopy
 from typing import Literal
 from waveform import Waveform
-from better_aubio import tempo, onset
+from better_aubio import tempo
 
 class Song:
 	def __init__(self, filename: str):
-		self.waveform = Waveform.from_file(filename)
 		self.bpm = tempo(filename)
-		self.beats = onset(filename)
 	
 	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int, int], order: int) -> 'Song':
 		new_song = deepcopy(self)
