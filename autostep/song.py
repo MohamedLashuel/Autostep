@@ -2,6 +2,9 @@ import numpy as np
 from scipy.io import wavfile
 from scipy import signal
 from copy import deepcopy
+from typing import Literal
+from waveform import Waveform
+from better_aubio import tempo
 
 class Song:
     def __init__(self, filepath: str, bpm: float, offset: float):
