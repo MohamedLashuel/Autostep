@@ -7,9 +7,14 @@ from Waveform import Waveform
 from audio_tempo_cli import aubio_tempo
 
 class Song:
-	def __init__(self, filename: str):
-		self.waveform = Waveform.from_file(filename)
-		self.bpm = aubio_tempo(filename)
+	def __init__(self, filepath: str, offset: float):
+		self.waveform = Waveform.from_file(filepath)
+		self.bpm = aubio_tempo(filepath)
+		self.offset = offset
+		self.filepath = filepath
+
+	def sample_rate(self) -> int: return self.waveform.sample_rate
+	def data(self) -> int: return self.waveform.data
 	
 	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int], order: int) -> 'Song':
 		new_song = deepcopy(self)

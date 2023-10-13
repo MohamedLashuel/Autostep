@@ -3,7 +3,6 @@ from scipy import signal
 import librosa
 import aubio
 from typing import Optional
-import muspy
 
 # Detection functions take the song as the first parameter
 # and all parameters after must be integers
@@ -22,7 +21,7 @@ def scipyPeaks(
 def librosaPeaks(song: Song, tightness: int = 100, 
 		hop_length: int = 512, trim: bool = True) -> np.ndarray:
 	return librosa.beat.beat_track(song.data, hop_length = hop_length,
-		tightness = tightness, trim = trim, sr = song.samplerate, 
+		tightness = tightness, trim = trim, sr = song.sample_rate(), 
 		bpm = song.bpm, units = 'samples')[1]
 
 # Similar to scipy, performance not that good
@@ -42,8 +41,8 @@ def aubioPeaks(song: Song, fft: int, hop: int, mode: int) -> np.ndarray:
 		}[mode]
 	
 	# We can't use the existing song data for this
-	s = aubio.source(song.filepath, song.samplerate, hop)
-	o = aubio.onset(algorithm, fft, hop, song.samplerate)
+	s = aubio.source(song.filepath, song.sample_rate(), hop)
+	o = aubio.onset(algorithm, fft, hop, song.sample_rate())
 	
 	onsets = []
 	num_read = hop
