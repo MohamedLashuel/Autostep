@@ -1,30 +1,46 @@
+import numpy as np
+from scipy.io import wavfile
+from scipy import signal
 from copy import deepcopy
-from typing import Literal
-from waveform import Waveform
-from better_aubio import tempo, onset
 
 class Song:
-	def __init__(self, filename: str):
-		self.waveform = Waveform.from_file(filename)
-		self.bpm = tempo(filename)
-		self.beats = onset(filename)
-	
-	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int, int], order: int) -> 'Song':
-		new_song = deepcopy(self)
-		match filter_type:
-			case 'low':
-				if not isinstance(cutoff, int):
-					raise TypeError("cutoff must be an int!")
-				new_song.waveform = self.waveform.lowpass(cutoff, order)
-			case 'high':
-				if not isinstance(cutoff, int):
-					raise TypeError("cutoff must be an int!")
-				new_song.waveform = self.waveform.highpass(cutoff, order)
-			case 'band':
-				if not isinstance(cutoff, tuple) or not isinstance(cutoff[0], int) or not isinstance(cutoff[1], int):
-					raise TypeError("cutoff must be a 2-tuple of ints!")
-				new_song.waveform = self.waveform.bandpass(cutoff[0], cutoff[1], order)
-		return new_song
-	
-	def save_to_file(self, filename: str) -> None:
-		self.waveform.save_to_file(filename)
+    def __init__(self, filepath: str, bpm: float, offset: float):
+        self.samplerate, self.data = wavfile.read(filepath)
+        self.nyquist_freq = self.samplerate * 0.5
+
+        self.filepath = filepath
+
+        self.data = averageChannels(self.data)
+        
+        self.bpm = bpm
+        self.offset = offset
+
+    def saveToFile(self, filename: str = 'audio.wav') -> None:
+        # Convert to integer for PCM format. HAS TO BE int16
+        data = np.int16(self.data)
+        wavfile.write(filename, self.samplerate, data)
+
+def averageChannels(data: np.ndarray) -> np.ndarray:
+    if data.ndim == 1: return data
+    return data[0:,0]//2 + data[0:,1]//2
+
+def audiopass(song: Song, type: str, cutoff_freq: tuple[int] | int, 
+        order: int, filepath = 'audio.wav') -> Song:
+    match type:
+        case 'highpass' | 'lowpass':
+            bound = cutoff_freq / song.nyquist_freq
+        case 'bandpass':
+            bound = (cutoff_freq[0] / song.nyquist_freq, 
+                cutoff_freq[1] / song.nyquist_freq)
+        case _:
+            raise ValueError(f'audiopass given type {type} which is invalid')
+
+    b, a = signal.butter(order, bound, btype=type)
+    song_copy = deepcopy(song)
+
+    song_copy.data = signal.filtfilt(b, a, song.data, axis=0)
+
+    song_copy.saveToFile(filepath)
+    song_copy.filepath = filepath
+
+    return song_copy
