@@ -1,5 +1,5 @@
 from code import interact
-from Song import Song
+from song import Song
 import numpy as np
 
 np.set_printoptions(precision=3)

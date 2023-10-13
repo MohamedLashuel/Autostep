@@ -1,17 +1,14 @@
-import numpy as np
-from scipy.io import wavfile
-from scipy import signal
 from copy import deepcopy
 from typing import Literal
-from Waveform import Waveform
-from audio_tempo_cli import aubio_tempo
+from waveform import Waveform
+from audio_tempo import aubio_tempo
 
 class Song:
 	def __init__(self, filename: str):
 		self.waveform = Waveform.from_file(filename)
 		self.bpm = aubio_tempo(filename)
 	
-	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int], order: int) -> 'Song':
+	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int, int], order: int) -> 'Song':
 		new_song = deepcopy(self)
 		match filter_type:
 			case 'low':
