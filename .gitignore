@@ -3,11 +3,4 @@ __pycache__
 *.mp3
 *.ogg
 *.old
-pretrained_models
-TurnOffTheLights
-bin
-lib*
-include
-pyvenv.cfg
-*.txt
 *.ssc

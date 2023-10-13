@@ -1,12 +1,13 @@
 from copy import deepcopy
 from typing import Literal
 from waveform import Waveform
-from audio_tempo import aubio_tempo
+from .better_aubio import tempo, onset
 
 class Song:
 	def __init__(self, filename: str):
 		self.waveform = Waveform.from_file(filename)
-		self.bpm = aubio_tempo(filename)
+		self.bpm = tempo(filename)
+		self.beats = onset(filename)
 	
 	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int, int], order: int) -> 'Song':
 		new_song = deepcopy(self)
@@ -20,7 +21,7 @@ class Song:
 					raise TypeError("cutoff must be an int!")
 				new_song.waveform = self.waveform.highpass(cutoff, order)
 			case 'band':
-				if not isinstance(cutoff, tuple):
+				if not isinstance(cutoff, tuple) or not isinstance(cutoff[0], int) or not isinstance(cutoff[1], int):
 					raise TypeError("cutoff must be a 2-tuple of ints!")
 				new_song.waveform = self.waveform.bandpass(cutoff[0], cutoff[1], order)
 		return new_song

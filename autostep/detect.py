@@ -1,8 +1,9 @@
-from song import *
+from song import Song
 from scipy import signal
+from typing import Optional
+import numpy as np
 import librosa
 import aubio
-from typing import Optional
 import muspy
 
 # Detection functions take the song as the first parameter
@@ -40,11 +41,11 @@ def aubioPeaks(song: Song, fft: int, hop: int, mode: int) -> np.ndarray:
 			7: 'mkl',
 			8: 'hfc'
 		}[mode]
-	
+
 	# We can't use the existing song data for this
 	s = aubio.source(song.filepath, song.samplerate, hop)
 	o = aubio.onset(algorithm, fft, hop, song.samplerate)
-	
+
 	onsets = []
 	num_read = hop
 	while num_read >= hop:
