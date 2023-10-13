@@ -1,5 +1,5 @@
 from code import interact
-from Song import Song
+from song import Song
 from array2chart import *
 from detect import *
 import numpy as np

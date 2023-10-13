@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Literal
 from waveform import Waveform
+import numpy as np
 from audio_tempo import aubio_tempo
 
 class Song:
@@ -11,7 +12,7 @@ class Song:
 		self.filepath = filepath
 
 	def sample_rate(self) -> int: return self.waveform.sample_rate
-	def data(self) -> int: return self.waveform.data
+	def data(self) -> np.ndarray: return self.waveform.data
 	
 	def filter(self, filter_type: Literal['low', 'high', 'band'], cutoff: int | tuple[int, int], order: int) -> 'Song':
 		new_song = deepcopy(self)
