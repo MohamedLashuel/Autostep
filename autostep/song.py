@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Literal
 from waveform import Waveform
-from .better_aubio import tempo, onset
+from better_aubio import tempo, onset
 
 class Song:
 	def __init__(self, filename: str):
