@@ -1,7 +1,9 @@
-import numpy as np
 from scipy.io import wavfile
 from scipy import signal
 from typing import Literal
+from better_aubio import tempo
+import numpy as np
+import sounddevice as sd
 
 class Song:
 	def __init__(self, filepath: str, bpm: float, offset: float):
@@ -9,7 +11,7 @@ class Song:
 		self.nyquist_freq = self.samplerate * 0.5
 		self.filepath = filepath
 		self.data = average_channels(self.data)
-		self.bpm = bpm
+		self.bpm = tempo(filepath)
 		self.offset = offset
 
 	def save_to_file(self, filename: str) -> None:
@@ -40,8 +42,7 @@ class Song:
 		b, a = signal.butter(order, bound, btype=type)
 		self.data = signal.filtfilt(b, a, self.data, axis=0)
 
-	def removeQuiet(self, threshold_prop: float, window = 1) -> None:
-		max, min = np.max(self.data), np.min(self.data)
+	def remove_quiet(self, threshold_prop: float, window = 1) -> None:
 		int_thresh = threshold_prop * np.max(self.data)
 
 		window_view = np.lib.stride_tricks.sliding_window_view(self.data, window)
@@ -49,10 +50,17 @@ class Song:
 		window_below_thresh = np.abs(window_view) < int_thresh
 
 		indices_to_blank = np.where(np.any(window_below_thresh, axis = 1))
+		assert int(np.max(indices_to_blank) / self.samplerate) == 232
 
 		self.data[indices_to_blank] = 0
 		self.data[1:window] = 0
 		self.data[len(self.data) - window:] = 0
+	
+	def play(self):
+		sd.play(self.data, self.samplerate)
+	
+	def stop(self):
+		sd.stop()
 
 def average_channels(data: np.ndarray) -> np.ndarray:
 	if data.ndim == 1:
