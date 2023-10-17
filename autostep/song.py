@@ -1,58 +1,24 @@
-from random import sample
-from typing import Literal, Optional
+import numpy as np
 from scipy.io import wavfile
 from scipy import signal
-from autostep.better_aubio import tempo
-from numpy.typing import NDArray
-import sounddevice as sd
-import numpy as np
-
-def average_channels(data: np.ndarray) -> np.ndarray:
-	if data.ndim == 1:
-		return data
-	return (data[0:,0] // 2) + (data[0:,1] // 2)
+from copy import deepcopy
 
 class Song:
-	@staticmethod
-	def from_file(filename: str, offset: float) -> 'Song':
-		sample_rate, data = wavfile.read(filename)
-		return Song(filename=filename, sample_rate=sample_rate, data=data, offset=offset)
+    def __init__(self, filepath: str, bpm: float, offset: float):
+        self.samplerate, self.data = wavfile.read(filepath)
+        self.nyquist_freq = self.samplerate * 0.5
 
-	def __init__(
-		self, *,
-		sample_rate: int,
-		data: NDArray[np.int16],
-		offset: float,
-		filename: Optional[str] = None,
-		bpm: Optional[int] = None
-	) -> None:
-		self.sample_rate = sample_rate
+        self.filepath = filepath
 
-		# if len(np.shape(data)) > 1:
-		# 	self.data: NDArray[np.int16] = average_channels(data)
-		# else:
-		self.data = data
+        self.data = averageChannels(self.data)
+        
+        self.bpm = bpm
+        self.offset = offset
 
-		self.nyquist_freq = self.sample_rate * 0.5
-		self.offset = offset
-		self.filename = filename
-		
-		if bpm is None:
-			if filename is None:
-				self.bpm = None
-			else:
-				self.bpm = tempo(filename)
-		else:
-			self.bpm = bpm
-
-	def save(self) -> None:
-		if self.filename is None:
-			raise AttributeError("This `Song` instance does not have a filename!")
-		self.save_to_file(self.filename)
-
-	def save_to_file(self, filename: str) -> None:
-		# Convert to integer for PCM format. HAS TO BE int16
-		wavfile.write(filename, self.sample_rate, np.int16(self.data))
+    def saveToFile(self, filename: str = 'audio.wav') -> None:
+        # Convert to integer for PCM format. HAS TO BE int16
+        data = np.int16(self.data)
+        wavfile.write(filename, self.samplerate, data)
 
     def audiopass(self, type: str, cutoff_freq: tuple[int] | int, 
         order: int, filepath = 'audio.wav') -> None:
