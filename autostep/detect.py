@@ -42,8 +42,8 @@ def aubioPeaks(song: Song, fft: int, hop: int, mode: int) -> np.ndarray:
 		}[mode]
 
 	# We can't use the existing song data for this
-	s = aubio.source(song.filepath, song.sample_rate, hop)
-	o = aubio.onset(algorithm, fft, hop, song.sample_rate)
+	s = aubio.source(song.filepath, song.samplerate, hop)
+	o = aubio.onset(algorithm, fft, hop, song.samplerate)
 
 	onsets = []
 	num_read = hop

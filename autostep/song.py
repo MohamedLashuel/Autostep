@@ -39,11 +39,18 @@ class Song:
         self.filepath = filepath
 
     def removeQuiet(self, threshold_prop: float, window = 1) -> None:
+        max, min = np.max(self.data), np.min(self.data)
         int_thresh = threshold_prop * np.max(self.data)
 
         window_view = np.lib.stride_tricks.sliding_window_view(self.data, window)
         
-        self.data[np.where(np.abs(self.data) < int_thresh)] = 0
+        window_below_thresh = np.abs(window_view) < int_thresh
+
+        indices_to_blank = np.where(np.any(window_below_thresh, axis = 1))
+
+        self.data[indices_to_blank] = 0
+        self.data[1:window] = 0
+        self.data[len(self.data) - window:] = 0
 
 def averageChannels(data: np.ndarray) -> np.ndarray:
     if data.ndim == 1: return data
