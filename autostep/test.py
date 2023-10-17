@@ -17,7 +17,6 @@ def runTest(song: Song, peaks: ndarray, grade_func: Callable[[str], int], *param
 # can take when calling detect_func
 
 # Return the set of parameters that yields the lowest score (lower = better)
-
 def optimize(song: Song, grade_func: Callable, detect_func: Callable, *args):
 	for tup in args:
 		assert len(tup)

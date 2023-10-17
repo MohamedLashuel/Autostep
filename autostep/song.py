@@ -20,27 +20,31 @@ class Song:
         data = np.int16(self.data)
         wavfile.write(filename, self.samplerate, data)
 
+    def audiopass(self, type: str, cutoff_freq: tuple[int] | int, 
+        order: int, filepath = 'audio.wav') -> None:
+        nyquist_freq = self.samplerate / 2
+        match type:
+            case 'highpass' | 'lowpass':
+                bound = cutoff_freq / nyquist_freq
+            case 'bandpass':
+                bound = (cutoff_freq[0] / nyquist_freq, 
+                    cutoff_freq[1] / nyquist_freq)
+            case _:
+                raise ValueError(f'audiopass given type {type} which is invalid')
+
+        b, a = signal.butter(order, bound, btype=type)
+        self.data = signal.filtfilt(b, a, self.data, axis=0)
+
+        self.saveToFile(filepath)
+        self.filepath = filepath
+
+    def removeQuiet(self, threshold_prop: float, window = 1) -> None:
+        int_thresh = threshold_prop * np.max(self.data)
+
+        window_view = np.lib.stride_tricks.sliding_window_view(self.data, window)
+        
+        self.data[np.where(np.abs(self.data) < int_thresh)] = 0
+
 def averageChannels(data: np.ndarray) -> np.ndarray:
     if data.ndim == 1: return data
     return data[0:,0]//2 + data[0:,1]//2
-
-def audiopass(song: Song, type: str, cutoff_freq: tuple[int] | int, 
-        order: int, filepath = 'audio.wav') -> Song:
-    match type:
-        case 'highpass' | 'lowpass':
-            bound = cutoff_freq / song.nyquist_freq
-        case 'bandpass':
-            bound = (cutoff_freq[0] / song.nyquist_freq, 
-                cutoff_freq[1] / song.nyquist_freq)
-        case _:
-            raise ValueError(f'audiopass given type {type} which is invalid')
-
-    b, a = signal.butter(order, bound, btype=type)
-    song_copy = deepcopy(song)
-
-    song_copy.data = signal.filtfilt(b, a, song.data, axis=0)
-
-    song_copy.saveToFile(filepath)
-    song_copy.filepath = filepath
-
-    return song_copy
