@@ -40,22 +40,19 @@ class Song:
 		b, a = signal.butter(order, bound, btype=type)
 		self.data = signal.filtfilt(b, a, self.data, axis=0)
 
-        self.saveToFile(filepath)
-        self.filepath = filepath
+	def removeQuiet(self, threshold_prop: float, window = 1) -> None:
+		max, min = np.max(self.data), np.min(self.data)
+		int_thresh = threshold_prop * np.max(self.data)
 
-    def removeQuiet(self, threshold_prop: float, window = 1) -> None:
-        max, min = np.max(self.data), np.min(self.data)
-        int_thresh = threshold_prop * np.max(self.data)
+		window_view = np.lib.stride_tricks.sliding_window_view(self.data, window)
+		
+		window_below_thresh = np.abs(window_view) < int_thresh
 
-        window_view = np.lib.stride_tricks.sliding_window_view(self.data, window)
-        
-        window_below_thresh = np.abs(window_view) < int_thresh
+		indices_to_blank = np.where(np.any(window_below_thresh, axis = 1))
 
-        indices_to_blank = np.where(np.any(window_below_thresh, axis = 1))
-
-        self.data[indices_to_blank] = 0
-        self.data[1:window] = 0
-        self.data[len(self.data) - window:] = 0
+		self.data[indices_to_blank] = 0
+		self.data[1:window] = 0
+		self.data[len(self.data) - window:] = 0
 
 def average_channels(data: np.ndarray) -> np.ndarray:
 	if data.ndim == 1:
