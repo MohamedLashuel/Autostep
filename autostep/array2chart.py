@@ -5,7 +5,7 @@ from song import Song
 
 DIVISION = 32
 
-def makeChartCode(beats: Iterable[int]) -> str:
+def makeChartCode(beats: Iterable[np.int16]) -> str:
 	beats = list(set(beats))
 	txt = ''
 	has_beat = [(n in beats) for n in range(max(beats))]
@@ -21,12 +21,12 @@ def makeChartCode(beats: Iterable[int]) -> str:
 	return txt
 
 def injectChartCode(chart_code, destination) -> None:
-	writeTxt('code.txt', chart_code)
-	convertToSSC('code.txt', 'chart.txt')
-	injectSSCToChart('chart.txt', destination, 1)
+	writeTxt('test_output/code.txt', chart_code)
+	convertToSSC('test_output/code.txt', 'test_output/chart.txt')
+	injectSSCToChart('test_output/chart.txt', destination, 1)
 
 def arrayToChart(peaks: np.ndarray, song: Song) -> None:
 	beat_times = (peaks / song.samplerate + song.offset) / 60 * song.bpm * DIVISION / 4
 	rounded_beats = np.int16(np.round(beat_times))
 	chart_code = makeChartCode(rounded_beats)
-	injectChartCode(chart_code, 'TurnOffTheLights.ssc')
+	injectChartCode(chart_code, 'sigma.ssc')
