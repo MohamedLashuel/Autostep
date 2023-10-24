@@ -49,7 +49,7 @@ class Song:
 		
 		window_below_thresh = np.abs(window_view) < int_thresh
 
-		indices_to_blank = np.where(np.any(window_below_thresh, axis = 1))
+		indices_to_blank = np.where(np.all(window_below_thresh, axis = 1))
 		assert int(np.max(indices_to_blank) / self.samplerate) == 232
 
 		self.data[indices_to_blank] = 0

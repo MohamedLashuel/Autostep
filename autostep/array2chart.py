@@ -3,7 +3,7 @@ from autochart.inout import writeTxt, convertToSSC, injectSSCToChart
 import numpy as np
 from song import Song
 
-DIVISION = 32
+DIVISION = 16
 
 def makeChartCode(beats: Iterable[np.int16]) -> str:
 	beats = list(set(beats))
@@ -29,4 +29,4 @@ def arrayToChart(peaks: np.ndarray, song: Song) -> None:
 	beat_times = (peaks / song.samplerate + song.offset) / 60 * song.bpm * DIVISION / 4
 	rounded_beats = np.int16(np.round(beat_times))
 	chart_code = makeChartCode(rounded_beats)
-	injectChartCode(chart_code, 'sigma.ssc')
+	injectChartCode(chart_code, 'TurnOffTheLights.ssc')
