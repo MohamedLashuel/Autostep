@@ -2,6 +2,8 @@ from imports import *
 
 class Song():
     def __init__(self, filepath: str):
+        self.filepath = filepath
+        
         self.data, self.samplerate = readWav(filepath)
         self.data = averageChannels(self.data)
 
