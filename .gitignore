@@ -6,3 +6,4 @@ __pycache__
 *.ssc
 pretrained_models
 test_output
+test_audio

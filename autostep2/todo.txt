@@ -4,6 +4,7 @@
 - Test song.py
 - Finish main file
 - Testing suite
+- Spleeter
 
 - Generating different difficulties
 - Tech (jumps, crossovers, footswitches, brackets)
