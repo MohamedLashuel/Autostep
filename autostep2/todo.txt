@@ -1,0 +1,10 @@
+- Test ssc module
+- Test songtochart
+- Implement aubio.py as an aubio wrapper and fix song.py with it
+- Test song.py
+- Finish main file
+- Testing suite
+
+- Generating different difficulties
+- Tech (jumps, crossovers, footswitches, brackets)
+- Front end demo
