@@ -1,2 +1,0 @@
-- Extract metadata from audio files and use it to update ssc
-- Readme
