@@ -1,7 +1,4 @@
 numpy
-scipy
-librosa
 aubio
-muspy
-sounddevice
 spleeter
+soundfile
