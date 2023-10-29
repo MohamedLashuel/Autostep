@@ -1,6 +1,6 @@
 from subprocess import check_output
 from typing import Callable, Literal
-from autostep3.util import NDFloatArray, NDIntArray
+from util import NDFloatArray, NDIntArray
 from math import inf
 import numpy as np
 import aubio

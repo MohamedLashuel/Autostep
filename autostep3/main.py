@@ -1,15 +1,17 @@
-from autostep3.util import NDIntArray, sample2note, highest_index
-from spleeter.separator import Separator
 from spleeter.audio import Codec
 from sys import argv, stderr
 import soundfile as sf
 from os import path
 import better_aubio
+from util import NDIntArray, sample2note, highest_index
 
-# Separation destination directory
+### Constants (we can paramaterize these later)
+
+# Spleeter: separation destination directory
 SEP_DEST_DIR = "separated_audio"
 
-# Use MP3 to save space
+# Spleeter: separated audio codec
+# MP3s save a lot of space compared to WAVs, so I think this is the best default
 CODEC = Codec.MP3
 
 # Whether to separate even if already separated
@@ -24,6 +26,8 @@ def main():
 	audio_path_without_ext = audio_path[:highest_index(audio_path, '.')]
 
 	if FORCE_SEP or not path.exists(path.join(SEP_DEST_DIR, audio_path_without_ext)):
+		# This import takes a while, so import it only when needed
+		from spleeter.separator import Separator
 		separator = Separator("spleeter:5stems")
 		separator.separate_to_file(audio_path, SEP_DEST_DIR, codec=CODEC, synchronous=True)
 
@@ -37,5 +41,6 @@ def main():
 
 	# TODO: do something with this rhythm
 
+# Call main() ONLY when this module is EXECUTED and not IMPORTED.
 if __name__ == "__main__":
 	main()
