@@ -1,8 +1,9 @@
 # Autostep
-A Python program to turn music files into DDR charts
+A Python program that turns music into DDR charts
 
 ## Getting started with development
-Run `devsetup.sh`:
 ```sh
-sh devsetup.sh
+git clone https://github.com/MohamedLashuel/Autostep
+cd Autostep
+sh scripts/devsetup.sh
 ```
