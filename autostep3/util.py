@@ -1,5 +1,8 @@
 from numpy.typing import NDArray
+from spleeter.audio import Codec
 import numpy as np
+import shutil
+from os import path
 
 NDFloatArray = NDArray[np.float_]
 NDIntArray = NDArray[np.int_]
@@ -43,3 +46,11 @@ def highest_index(s: str, target: str) -> int:
 		if s[i] == target:
 			return i
 	return -1
+
+def separate_drums(audio_path: str, force: bool = False):
+	audio_file_name = audio_path[highest_index(audio_path, '/') + 1 : highest_index(audio_path, '.')]
+	if force or not path.exists(f'/tmp/{audio_file_name}'):
+		from spleeter.separator import Separator
+		separator = Separator("spleeter:5stems")
+		separator.separate_to_file(audio_path, '/tmp', codec=Codec.MP3, synchronous=True)
+	return shutil.copyfile(f'/tmp/{audio_file_name}/drums.mp3', 'separated_drums.wav')
