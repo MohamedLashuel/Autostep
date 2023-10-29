@@ -1,15 +1,27 @@
-from typing import Callable
 from numpy.typing import NDArray
 import numpy as np
 
 NDFloatArray = NDArray[np.float_]
 NDIntArray = NDArray[np.int_]
 
-"""
-Converts a stereo waveform to mono, by taking the maximum of the 2 channels.
-"""
 stereo2mono = lambda audio: np.max(audio, axis=1)
-stereo2mono: Callable[[NDFloatArray], NDFloatArray]
+
+sample2note = lambda sample, samplerate, tempo, note_division = 4: (sample / samplerate) / (60 / tempo) * (note_division / 4)
+"""
+Converts a sample number to a note number of a certain division.
+
+By default, `note_division = 4`, so `sample` will be approximated to quarter notes (whole or fractional).
+
+In general, `note_division = X` will approximate `sample` to `Y`s:
+| `X` | `Y` |
+|:--------:|:--------:|
+| 1 | whole note |
+| 2 | half note |
+| 4 | quarter note |
+| 8 | eighth note |
+| 16 | sixteenth note |
+| ... | ... |
+"""
 
 def cutoff_samples(samples: NDFloatArray, cutoff_threshold: float) -> None:
 	"""
@@ -17,8 +29,17 @@ def cutoff_samples(samples: NDFloatArray, cutoff_threshold: float) -> None:
 
 	Requires that `len(samples.shape) == 1`.
 	"""
-	if len(samples.shape) > 1:
-		raise ValueError("len(samples.shape) > 1")
+	if len(samples.shape) != 1:
+		raise ValueError("len(samples.shape) != 1")
 	for r in range(samples.shape[0]):
 		if abs(samples[r]) < cutoff_threshold:
 			samples[r] = 0
+
+def highest_index(s: str, target: str) -> int:
+	"""
+	Find the highest index in which `target` occurs in `s`.
+	"""
+	for i in range(len(s) - 1, -1, -1):
+		if s[i] == target:
+			return i
+	return -1

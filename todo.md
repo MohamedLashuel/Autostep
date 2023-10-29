@@ -11,6 +11,9 @@
 - Tech (jumps, crossovers, footswitches, brackets)
 - Front end demo
 
+## In `autostep3`
+- Implement musical note subdivision
+
 ## If we have time...
 - Extract metadata from audio files and use it to update ssc
 - Readme
