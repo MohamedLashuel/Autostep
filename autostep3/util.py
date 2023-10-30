@@ -9,7 +9,7 @@ NDIntArray = NDArray[np.int_]
 
 stereo2mono = lambda audio: np.max(audio, axis=1)
 
-sample2note = lambda sample, samplerate, tempo, note_division = 4: (sample / samplerate) / (60 / tempo) * (note_division / 4)
+sample2note = lambda sample, samplerate, tempo, note_division = 4: np.int_((sample / samplerate) / (60 / tempo) * (note_division / 4))
 """
 Converts a sample number to a note number of a certain division.
 
@@ -25,6 +25,12 @@ In general, `note_division = X` will approximate `sample` to `Y`s:
 | 16 | sixteenth note |
 | ... | ... |
 """
+
+# I algebraically solved sample2note for sample and got this...
+note2sample = lambda note, samplerate, tempo, note_division = 4: np.int_(samplerate * note * (60 / tempo) * (4 / note_division))
+
+# This should return sample numbers snapped to `note_division` notes
+snap_sample = lambda sample, samplerate, tempo, note_division = 4: note2sample(sample2note(sample, samplerate, tempo, note_division), samplerate, tempo, note_division)
 
 def cutoff_samples(samples: NDFloatArray, cutoff_threshold: float) -> None:
 	"""
@@ -47,10 +53,11 @@ def highest_index(s: str, target: str) -> int:
 			return i
 	return -1
 
-def separate_drums(audio_path: str, force: bool = False):
+def separate_drums(audio_path: str, sep_path = "separated", force = False):
 	audio_file_name = audio_path[highest_index(audio_path, '/') + 1 : highest_index(audio_path, '.')]
-	if force or not path.exists(f'/tmp/{audio_file_name}'):
+	drums_path = path.join(sep_path, audio_file_name, "drums.mp3")
+	if force or not path.exists(drums_path):
 		from spleeter.separator import Separator
 		separator = Separator("spleeter:5stems")
-		separator.separate_to_file(audio_path, '/tmp', codec=Codec.MP3, synchronous=True)
-	return shutil.copyfile(f'/tmp/{audio_file_name}/drums.mp3', 'separated_drums.wav')
+		separator.separate_to_file(audio_path, sep_path, codec=Codec.MP3, synchronous=True)
+	return drums_path

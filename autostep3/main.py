@@ -15,6 +15,7 @@ def main():
 	onsets = better_aubio.onset(drums_path, 'energy')
 
 	onsets_sixteenth_notes: NDIntArray = sample2note(onsets, samplerate, tempo, 16)
+	print(onsets_sixteenth_notes)
 
 	# TODO: do something with this rhythm
 
