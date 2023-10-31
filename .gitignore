@@ -1,9 +1,6 @@
 .venv
 __pycache__
-*.mp3
-*.ogg
-*.old
-*.ssc
 pretrained_models
 test_output
+separated
 test_audio
