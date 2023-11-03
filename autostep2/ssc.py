@@ -2,13 +2,11 @@ from imports import *
 from song import *
 
 class ssc:
-    def __init__(self, song: Song, chart_ratings_filepaths: 
-            list[tuple[int,str]], filepath: str):
-        assert pathIsValid(filepath)
-
+    def __init__(self, song_filepath: str, bpm: float, offset: float,
+                 code_filepath: str, rating: int):
         self.attributes = initialAttributes()
 
-        new_attributes = {'music': song.filepath,
+        new_attributes = {'music': song_filepath,
                           'bpms': f'0.000={song.bpm}',
                           'offset': song.offset}
         
@@ -85,9 +83,3 @@ def chartText(chart_filepath: str, chart_rating: int, diff_pos: int):
 def loadTxt(chart_filepath: str):
     with open(chart_filepath, 'r') as f:
         return f.read()
-    
-def pathIsValid(filepath: str):
-    try:
-        open(filepath, 'w')
-    except
-    # Finish later
