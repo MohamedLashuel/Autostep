@@ -1,3 +1,4 @@
+from typing import Callable
 from numpy.typing import NDArray
 from spleeter.audio import Codec
 import numpy as np
@@ -58,11 +59,25 @@ def separate_drums(
 	codec = Codec.WAV,
 	sep_path = "separated",
 	force = False
-):
+) -> tuple[str, str]:
 	audio_file_name = audio_path[highest_index(audio_path, '/') + 1 : highest_index(audio_path, '.')]
 	drums_path = path.join(sep_path, audio_file_name, "drums." + codec)
 	if force or not path.exists(drums_path):
 		from spleeter.separator import Separator
 		separator = Separator("spleeter:5stems")
 		separator.separate_to_file(audio_path, sep_path, codec=codec, synchronous=True)
-	return drums_path
+	return drums_path, audio_file_name
+
+def make_chart_code(
+	onsets: NDIntArray,
+	division: int,
+	filename: str
+) -> None:
+	with open(filename, 'w') as file:
+		for i in range(max(onsets)):
+			if i % division == 0:
+				file.write("/")
+			if i in onsets:
+				file.write("n")
+			else:
+				file.write(".")

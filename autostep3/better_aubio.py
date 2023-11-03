@@ -1,5 +1,5 @@
 from typing import Callable, Literal
-from autostep3.util import NDIntArray
+from util import NDIntArray
 import numpy as np
 import aubio
 import subprocess
@@ -17,10 +17,10 @@ OnsetMethod = Literal['default', 'energy', 'hfc', 'complex', 'phase', 'specdiff'
 # Returns onsets in SAMPLES
 def onset(
 	filename: str,
+	method: OnsetMethod = "complex",
 	*,
 	fft_size: int = 1024,
-	hop_size: int = 512,
-	method: OnsetMethod = "complex"
+	hop_size: int = 512
 ) -> NDIntArray:
 	s = aubio.source(filename) # type: ignore
 	o = aubio.onset(method, fft_size, hop_size) # type: ignore
