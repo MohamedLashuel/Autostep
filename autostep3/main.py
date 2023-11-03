@@ -6,7 +6,7 @@ from autochart.inout import convertToSSC, injectSSCToChart
 
 def main():
 	if len(argv) != 2:
-		print(f"Usage: {argv[0]} <audio_file>", file=stderr)
+		print(f"Usage: {argv[0]} <audio_file> <difficulties>", file=stderr)
 		exit(1)
 
 	drums_path, audio_file_name = separate_drums(argv[1])
