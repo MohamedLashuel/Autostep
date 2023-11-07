@@ -81,6 +81,7 @@ def cut_offset(
 	output_file: str,
 	offset: float
 ) -> None:
+	offset = -offset
 	samplerate = sf.info(audio_file).samplerate
-	audio, _ = sf.read(audio_file, start=offset * samplerate)
-	sf.write(output_file, audio)
+	audio, _ = sf.read(audio_file, start=int(offset * samplerate))
+	sf.write(output_file, audio, samplerate)
