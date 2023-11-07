@@ -111,25 +111,14 @@ def create_file(
 ) -> None:
 	attributes = DEFAULT_ATTRS.copy()
 
-	# new_attributes = {'music': audio_file, 'bpms': f'0.000={bpm}', 'offset': offset}
+	new_attributes = {'music': audio_file, 'bpms': f'0.000={bpm}', 'offset': offset}
 
-	# attributes.update(new_attributes)
+	attributes.update(new_attributes)
 
-	# attribute_text = attributeText(attributes)
-	# chart_text = chartText(chart_file)
+	attribute_text = attributeText(attributes)
+	chart_text = chartText(chart_file)
 
-	# text = attribute_text + chart_text
-
-	with open(ssc_file, 'w') as file:
-		write_attr = lambda key, value: file.write(f"#{key}:{value};\n")
-		write_attr("VERSION", "0.83")
-		write_attr("TITLE", title)
-		write_attr("ARTIST", artist)
-		write_attr("MUSIC", music_filename)
-		if bg_filename is not None:
-			write_attr("BACKGROUND", bg_filename)
-		write_attr("OFFSET", str(offset))
-		write_attr("BPMS", "0.000={3f}")
+	text = attribute_text + chart_text
 
 def attributeText(attributes):
 	def attributeToLine(item):
