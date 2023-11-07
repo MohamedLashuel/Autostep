@@ -1,8 +1,8 @@
-from typing import Callable
 from numpy.typing import NDArray
 from spleeter.audio import Codec
 import numpy as np
 from os import path
+import soundfile as sf
 
 NDFloatArray = NDArray[np.float_]
 NDIntArray = NDArray[np.int_]
@@ -25,12 +25,6 @@ In general, `note_division = X` will approximate `sample` to `Y`s:
 | 16 | sixteenth note |
 | ... | ... |
 """
-
-# I algebraically solved sample2note for sample and got this...
-note2sample = lambda note, samplerate, tempo, note_division = 4: np.int_(samplerate * note * (60 / tempo) * (4 / note_division))
-
-# This should return sample numbers snapped to `note_division` notes
-snap_sample = lambda sample, samplerate, tempo, note_division = 4: note2sample(sample2note(sample, samplerate, tempo, note_division), samplerate, tempo, note_division)
 
 def cutoff_samples(samples: NDFloatArray, cutoff_threshold: float) -> None:
 	"""
@@ -81,3 +75,12 @@ def make_chart_code(
 				file.write("n")
 			else:
 				file.write(".")
+
+def cut_offset(
+	audio_file: str,
+	output_file: str,
+	offset: float
+) -> None:
+	samplerate = sf.info(audio_file).samplerate
+	audio, _ = sf.read(audio_file, start=offset * samplerate)
+	sf.write(output_file, audio)

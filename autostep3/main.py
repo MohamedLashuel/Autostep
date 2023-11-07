@@ -1,4 +1,4 @@
-from util import make_chart_code, sample2note, separate_drums
+from util import cut_offset, make_chart_code, sample2note, separate_drums
 from sys import argv, stderr
 import soundfile as sf
 import better_aubio
@@ -10,11 +10,19 @@ def main():
 		print(f"Usage: {argv[0]} <audio_file> <bpm> <offset> <output_file>",
 		 file=stderr)
 		exit(1)
+	
+	audio_file = argv[1]
+	bpm = int(argv[2])
+	offset = -float(argv[3])
+	output_file = argv[4]
 
-	drums_path, audio_file_name = separate_drums(argv[1])
+	if offset > 0:
+		cut_offset(audio_file, audio_file + "-offset.mp3", offset)
+		audio_file += "-offset.mp3"
+
+	drums_path, audio_file_name = separate_drums(audio_file)
 	samplerate = sf.info(drums_path).samplerate
 
-	bpm, offset, output_file = argv[2:]
 	onsets = better_aubio.onset(drums_path, 'energy')
 	onsets_sixteenth_notes = sample2note(onsets, samplerate, bpm, 16)
 	make_chart_code(onsets_sixteenth_notes, 16, "code.txt")
