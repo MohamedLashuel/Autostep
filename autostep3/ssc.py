@@ -8,10 +8,10 @@ ATTR_NAMES = [
 ]
 
 DEFAULT_ATTRS = {
-	'version': 0.83, 
-	'samplestart': 0.000, 
-	'samplelength': 0.000, 
-	'offset': 0.000, 
+	'version': 0.83,
+	'samplestart': 0.000,
+	'samplelength': 0.000,
+	'offset': 0.000,
 	'bpms': '0.000=120.000'
 }
 
@@ -36,12 +36,12 @@ class SscFile:
 	def open(filename: str) -> 'SscFile':
 		with open(filename, "r") as file:
 			file_text = file.read()
-		
+
 		def find_value(key: str):
 			key = f"#{key}:"
 			index = file_text.index(key) + len(key)
 			return file_text[index : file_text.index(";", index)]
-		
+
 		return SscFile(
 			title=find_value("TITLE"),
 			music_filename=find_value("MUSIC"),
@@ -73,7 +73,7 @@ class SscFile:
 		self.artist = artist
 		self.bg_filename = bg_filename
 		self.charts = charts
-	
+
 	def save_as(self, filename: str):
 		with open(filename, "w") as file:
 			write_attr = lambda key, value: file.write(f"#{key}:{value};\n")
