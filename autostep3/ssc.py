@@ -32,6 +32,31 @@ class SscChart:
 		self.notes = notes
 
 class SscFile:
+	@staticmethod
+	def open(filename: str) -> 'SscFile':
+		with open(filename, "r") as file:
+			file_text = file.read()
+		
+		def find_value(key: str):
+			key = f"#{key}:"
+			index = file_text.index(key) + len(key)
+			return file_text[index : file_text.index(";", index)]
+		
+		return SscFile(
+			title=find_value("TITLE"),
+			music_filename=find_value("MUSIC"),
+			offset=find_value("OFFSET"),
+			artist=find_value("ARTIST"),
+			bg_filename=find_value("BACKGROUND")
+		)
+
+		# charts = []
+		# while True:
+		# 	match file_text.find("//-----"):
+		# 		case -1:
+		# 			break
+		# 		case chart_idx:
+
 	def __init__(self,
 		title: str,
 		music_filename: str,
@@ -61,6 +86,7 @@ class SscFile:
 			write_attr("OFFSET", str(self.offset))
 			write_attr("BPMS", "0.000={3f}")
 			for chart in self.charts:
+				file.write(f"//--------------- {chart.stepstype} -----------------")
 				#write_attr("NOTEDATA", "")
 				write_attr("STEPSTYPE", chart.stepstype)
 				write_attr("DIFFICULTY", chart.difficulty)
