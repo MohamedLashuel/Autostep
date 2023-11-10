@@ -9,7 +9,7 @@ NDIntArray = NDArray[np.int_]
 
 stereo2mono = lambda audio: np.max(audio, axis=1)
 
-sample2note = lambda sample, samplerate, tempo, note_division = 4: np.int_((sample / samplerate) / (60 / tempo) * (note_division / 4))
+sample2note = lambda sample, samplerate, tempo, offset = 0, note_division = 4: np.int_((sample / samplerate + offset) / (60 / tempo) * (note_division / 4))
 """
 Converts a sample number to a note number of a certain division.
 
@@ -75,13 +75,3 @@ def make_chart_code(
 				file.write("n")
 			else:
 				file.write(".")
-
-def cut_offset(
-	audio_file: str,
-	output_file: str,
-	offset: float
-) -> None:
-	offset = -offset
-	samplerate = sf.info(audio_file).samplerate
-	audio, _ = sf.read(audio_file, start=int(offset * samplerate))
-	sf.write(output_file, audio, samplerate)

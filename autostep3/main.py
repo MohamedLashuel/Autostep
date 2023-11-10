@@ -16,18 +16,11 @@ def main():
 	offset = float(argv[3])
 	output_file = argv[4]
 
-	if offset < 0:
-		cut_offset(audio_file, audio_file + "-offset.wav", offset)
-		offset_audio_file = audio_file + "-offset.wav"
-	else:
-		print("NAUR")
-		exit()
-
-	drums_path, _ = separate_drums(offset_audio_file)
+	drums_path, _ = separate_drums(audio_file)
 	samplerate = sf.info(drums_path).samplerate
 
 	onsets = better_aubio.onset(drums_path, 'energy')
-	onsets_sixteenth_notes = sample2note(onsets, samplerate, bpm, 16)
+	onsets_sixteenth_notes = sample2note(onsets, samplerate, bpm, offset, 16)
 	make_chart_code(onsets_sixteenth_notes, 16, "code.txt")
 	convertToSSC("code.txt", "chart.txt")
 
