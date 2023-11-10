@@ -18,7 +18,7 @@ def main():
 	drums_path, _ = separate_drums(audio_file)
 	samplerate = sf.info(drums_path).samplerate
 
-	onsets = better_aubio.onset(drums_path, 'energy')
+	onsets = better_aubio.onset(drums_path, 'complex')
 	onsets_sixteenth_notes = sample2note(onsets, samplerate, bpm, offset, 16)
 	make_chart_code(onsets_sixteenth_notes, 16, "code.txt")
 	convertToSSC("code.txt", "chart.txt")
