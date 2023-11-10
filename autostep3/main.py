@@ -7,8 +7,7 @@ from autochart.inout import convertToSSC, injectSSCToChart
 
 def main():
 	if len(argv) != 5:
-		print(f"Usage: {argv[0]} <audio_file> <bpm> <offset> <output_file>",
-		 file=stderr)
+		print(f"Usage: {argv[0]} <audio_file> <bpm> <offset> <output_file>", file=stderr)
 		exit(1)
 	
 	audio_file = argv[1]
