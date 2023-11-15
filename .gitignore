@@ -1,11 +1,6 @@
 .venv
 __pycache__
 pretrained_models
-test_output
+tests/output
 separated
-test_audio
-*.wav
 *.ssc
-*.mp3
-*.ogg
-*.txt
