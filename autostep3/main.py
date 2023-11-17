@@ -11,14 +11,14 @@ def main():
 		exit(1)
 	
 	audio_file = argv[1]
-	bpm = int(argv[2])
+	bpm = float(argv[2])
 	offset = float(argv[3])
 	output_file = argv[4]
 
 	drums_path, _ = separate_drums(audio_file)
 	samplerate = sf.info(drums_path).samplerate
 
-	onsets = better_aubio.onset(drums_path, 'complex')
+	onsets = better_aubio.onset(drums_path, 'energy')
 	onsets_sixteenth_notes = sample2note(onsets, samplerate, bpm, offset, 16)
 	make_chart_code(onsets_sixteenth_notes, 16, "code.txt")
 	convertToSSC("code.txt", "chart.txt")
