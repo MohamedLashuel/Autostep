@@ -21,12 +21,12 @@ ARGUMENTS: dict[str, dict[str, Any]] = {
 	},
 	"--bpm": {
 		"type": float,
-		"help": "Music tempo",
+		"help": "Music tempo (highly recommended to set!)",
 		"required": False
 	},
 	"--offset": {
 		"type": float,
-		"help": "Music start time relative to audio start time",
+		"help": "Music start time relative to audio start time (highly recommended to set!)",
 		"default": 0
 	},
 	"--division": {
@@ -43,7 +43,7 @@ ARGUMENTS: dict[str, dict[str, Any]] = {
 	},
 	"--sample2note_method": {
 		"choices": ("default", "round", "offset", "round+offset"),
-		"default": "default"
+		"default": "round+offset"
 	}
 }
 
@@ -61,16 +61,7 @@ def main():
 	if args.bpm is None:
 		args.bpm = better_aubio.tempo_cli(args.audio_file)
 
-	# this is here for TESTING PURPOSES, at least for now
-	match args.sample2note_method:
-		case "default":
-			onsets_sixteenth_notes = util.sample2note(onsets, samplerate, args.bpm, 16)
-		case "round":
-			onsets_sixteenth_notes = util.sample2note_round(onsets, samplerate, args.bpm, 16)
-		case "offset":
-			onsets_sixteenth_notes = util.sample2note_offset(onsets, samplerate, args.bpm, args.offset, 16)
-		case "round+offset":
-			onsets_sixteenth_notes = util.sample2note_round_offset(onsets, samplerate, args.bpm, args.offset, 16)
+	onsets_sixteenth_notes = util.sample2note(onsets, samplerate, args.bpm, args.offset, args.division)
 
 	util.make_chart_code(onsets_sixteenth_notes, 16, CODE_FILE) # type: ignore
 	autochart.inout.convertToSSC(CODE_FILE, CHART_FILE)
