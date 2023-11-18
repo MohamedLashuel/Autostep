@@ -1,4 +1,4 @@
-SONG_NAME=obsessed
+SONG_NAME=bxxk2me
 ONSET_METHODS=(default hfc)
 
 for onset_method in "${ONSET_METHODS[@]}"; do
