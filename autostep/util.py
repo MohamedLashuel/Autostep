@@ -1,7 +1,7 @@
 from numpy.typing import NDArray
 from spleeter.audio import Codec
-import numpy as np
 from os import path
+import numpy as np
 
 NDFloatArray = NDArray[np.float_]
 NDIntArray = NDArray[np.int_]
@@ -21,7 +21,16 @@ audio: NDFloatArray
 ```
 """
 
-sample2note = lambda sample, samplerate, tempo, offset = 0, note_division = 16: \
+sample2note = lambda sample, samplerate, tempo, note_division = 16: \
+	np.int_((sample / samplerate) / 60 * tempo * note_division / 4)
+
+sample2note_round = lambda sample, samplerate, tempo, note_division = 16: \
+	np.int_(np.round((sample / samplerate) / 60 * tempo * note_division / 4))
+
+sample2note_offset = lambda sample, samplerate, tempo, offset = 0, note_division = 16: \
+	np.int_((sample / samplerate + offset) / 60 * tempo * note_division / 4)
+
+sample2note_round_offset = lambda sample, samplerate, tempo, offset = 0, note_division = 16: \
 	np.int_(np.round((sample / samplerate + offset) / 60 * tempo * note_division / 4))
 """
 Converts a sample number to a note number of a certain division.
@@ -53,7 +62,10 @@ sample: NDFloatArray | float
 ```
 """
 
-def cutoff_samples(samples: NDFloatArray, cutoff_threshold: float):
+def cutoff_samples(
+	samples: NDFloatArray,
+	cutoff_threshold: float
+) -> NDFloatArray:
 	"""
 	Returns a copy of `samples` where every `sample` is zero if `|sample| < cutoff_threshold`.
 
@@ -87,14 +99,15 @@ def separate_drums(
 	codec = Codec.WAV,
 	sep_path = "separated",
 	force = False
-) -> tuple[str, str]:
+) -> tuple[str, str, str]:
 	audio_file_name = audio_path[highest_index(audio_path, "/") + 1 : highest_index(audio_path, ".")]
+	audio_file_ext = audio_path[highest_index(audio_path, ".") :]
 	drums_path = path.join(sep_path, audio_file_name, "drums." + codec)
 	if force or not path.exists(drums_path):
 		from spleeter.separator import Separator
 		separator = Separator("spleeter:5stems")
 		separator.separate_to_file(audio_path, sep_path, codec=codec, synchronous=True)
-	return drums_path, audio_file_name
+	return drums_path, audio_file_name, audio_file_ext
 
 def make_chart_code(
 	onsets: NDIntArray,

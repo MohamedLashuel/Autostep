@@ -8,7 +8,7 @@ DEFAULT_ATTRIBUTES = {
 	"BPMS": '0.000=120.000'
 }
 
-DIFFICULTY_NAMES = "Beginner", "Easy", "Medium", "Hard", "Challenge"
+DIFFICULTY_NAMES = ("Beginner", "Easy", "Medium", "Hard", "Challenge")
 
 make_attribute_text: Callable[[dict[str, Any]], str]
 make_attribute_text = lambda attributes: "\n".join(f"#{item[0]}:{item[1]};" for item in attributes.items())

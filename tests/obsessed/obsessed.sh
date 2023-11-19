@@ -1,9 +1,17 @@
-SONG_NAME=obsessed
-ONSET_METHODS=(default hfc)
+EXT=mp3
+BPM=128
+OFFSET=-0.051
 
-for onset_method in "${ONSET_METHODS[@]}"; do
-	python autostep/main.py $SONG_NAME.mp3 tests/$SONG_NAME/$SONG_NAME-$onset_method.ssc \
-		--bpm 148 \
-		--offset -0.055 \
-		--onset_method $onset_method
-done
+ONSET_METHODS=(
+	default
+	#complex
+	#energy
+	#hfc
+)
+
+SAMPLE2NOTE_METHODS=(
+	default
+	round
+	offset
+	round+offset
+)

@@ -4,3 +4,4 @@ pretrained_models
 tests/output
 separated
 *.ssc
+*.ac
