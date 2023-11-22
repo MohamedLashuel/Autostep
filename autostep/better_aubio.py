@@ -14,6 +14,16 @@ shell_exec = lambda command: subprocess.check_output(command, shell=True, text=T
 tempo_cli: Callable[[str], float]
 tempo_cli = lambda filename: int(float(shell_exec(f"aubio tempo {filename}").replace(" bpm", "")))
 
+# Method used by arrow vortex to get offset and bpm. Use this eventually
+def vortex_cli(filename: str) -> tuple[float, float]: 
+	output = shell_exec('./FindTempo_standalone test_audio/edamame.ogg')
+	words = output.split()
+	bpm = float(words[21])
+	# Program returns time of first onset, offset is negative that
+	offset = -float(words[25])
+
+	return bpm, offset
+
 ONSET_METHODS = ("default", "energy", "hfc", "complex", "phase", "specdiff", "kl", "mkl", "specflux")
 OnsetMethod = Literal["default", "energy", "hfc", "complex", "phase", "specdiff", "kl", "mkl", "specflux"]
 

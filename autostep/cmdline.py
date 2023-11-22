@@ -14,18 +14,22 @@ ARGUMENTS: dict[str, dict[str, Any]] = {
 	},
 	"--bpm": {
 		"type": float,
-		"help": "Music tempo (highly recommended to set!)",
+		"help": "Music tempo",
 		"required": False
 	},
 	"--offset": {
 		"type": float,
-		"help": "Music start time relative to audio start time (highly recommended to set!)",
-		"default": 0
+		"help": "Music start time relative to audio start time",
+		"required": False
 	},
 	"--division": {
 		"type": int,
 		"help": "Total number of notes in a measure",
 		"default": 16
+	},
+	"--inplace": {
+		"action": "store_true",
+		"default": False
 	}
 }
 
