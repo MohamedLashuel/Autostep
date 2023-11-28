@@ -7,19 +7,19 @@ def main():
 
 	drums_path, audio_file_name, audio_file_ext = util.separate_drums(args.audio_file)
 
-	folder_path = audio_file_name
-	i = 1
-	if not args.inplace:
-		while os.path.exists(folder_path):
-			folder_path = f'{audio_file_name} ({i})'
-			i += 1
-		os.mkdir(folder_path)
-		os.chdir(folder_path)
-		new_audio_file = f'{audio_file_name}.ogg'
-		os.popen(f'cp ../{args.audio_file} {audio_file_name}')
-		os.popen(f'ffmpeg -i {audio_file_name} {new_audio_file}')
-		args.audio_file = new_audio_file
-		drums_path = f'../{drums_path}'
+	os.mkdir(args.output)
+	os.chdir(args.output)
+
+	new_audio_file = f'{audio_file_name}.ogg'
+	if audio_file_ext == '.ogg':
+		os.popen(f'cp ../{args.audio_file} .')
+	else:
+		better_aubio.shell_exec(f'ffmpeg -i ../{args.audio_file} {new_audio_file}')
+	
+	args.audio_file = new_audio_file
+	drums_path = f'../{drums_path}'
+	args.code_file = f'../{args.code_file}'
+	args.chart_file = f'../{args.chart_file}'
 	
 	samplerate = sf.info(drums_path).samplerate
 
@@ -29,9 +29,6 @@ def main():
 		bpm, offset = better_aubio.vortex_cli(drums_path)
 		if args.bpm is None: args.bpm = bpm
 		if args.offset is None: args.offset = offset
-
-	print(args.bpm)
-	print(args.offset)
 
 	match args.sample2note_method:
 		case "default":
@@ -46,8 +43,8 @@ def main():
 	util.make_chart_code(onsets_sixteenth_notes, 16, args.code_file) # type: ignore
 	autochart.inout.convertToSSC(args.code_file, args.chart_file)
 
-	ssc.write(args.audio_file, args.bpm, args.offset, 1, 0, args.chart_file, args.output_file)
-	autochart.inout.injectSSCToChart(args.chart_file, args.output_file, 1)
+	ssc.write(args.audio_file, args.bpm, args.offset, 1, 0, args.chart_file, f'{audio_file_name}.ssc')
+	autochart.inout.injectSSCToChart(args.chart_file, f'{audio_file_name}.ssc', 1)
 
 # Call main() ONLY when this module is EXECUTED and not IMPORTED.
 if __name__ == "__main__":

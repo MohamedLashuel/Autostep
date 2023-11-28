@@ -9,8 +9,8 @@ ARGUMENTS: dict[str, dict[str, Any]] = {
 	"audio_file": {
 		"help": "Path to an audio file, typically containing music"
 	},
-	"output_file": {
-		"help": "The file to save the ITGMania chart to, typically ending in .ssc"
+	"output": {
+		"help": "The folder which contents will be outputted to"
 	},
 	"--bpm": {
 		"type": float,
@@ -27,10 +27,6 @@ ARGUMENTS: dict[str, dict[str, Any]] = {
 		"help": "Total number of notes in a measure",
 		"default": 16
 	},
-	"--inplace": {
-		"action": "store_true",
-		"default": False
-	}
 }
 
 for key, value in ARGUMENTS.items():
@@ -52,11 +48,11 @@ ADVANCED_OPTS = {
 		"help": "The sample2note implementation to use"
 	},
 	"--code_file": {
-		"default": "/tmp/autostep.ac",
+		"default": "tmp/autostep.ac",
 		"help": "Where to store the Autochart code"
 	},
 	"--chart_file": {
-		"default": "/tmp/autostep.ssc.notes",
+		"default": "tmp/autostep.ssc.notes",
 		"help": "Where to store the SSC notes"
 	}
 }

@@ -16,7 +16,7 @@ tempo_cli = lambda filename: int(float(shell_exec(f"aubio tempo {filename}").rep
 
 # Method used by arrow vortex to get offset and bpm. Use this eventually
 def vortex_cli(filename: str) -> tuple[float, float]: 
-	output = shell_exec('./FindTempo_standalone test_audio/edamame.ogg')
+	output = shell_exec(f'../FindTempo_standalone {filename}')
 	words = output.split()
 	bpm = float(words[21])
 	# Program returns time of first onset, offset is negative that
