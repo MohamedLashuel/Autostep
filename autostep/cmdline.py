@@ -42,11 +42,6 @@ ADVANCED_OPTS = {
 		"default": "default",
 		"help": "The onset (beat) detection method to use"
 	},
-	"--sample2note_method": {
-		"choices": ("default", "round", "offset", "round+offset"),
-		"default": "round+offset",
-		"help": "The sample2note implementation to use"
-	},
 	"--code_file": {
 		"default": "tmp/autostep.ac",
 		"help": "Where to store the Autochart code"

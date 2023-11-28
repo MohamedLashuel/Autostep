@@ -6,15 +6,11 @@ except ModuleNotFoundError:
 import numpy as np
 import aubio
 import subprocess
-import math
 
 shell_exec: Callable[[str], str]
 shell_exec = lambda command: subprocess.check_output(command, shell=True, text=True)
 
-tempo_cli: Callable[[str], float]
-tempo_cli = lambda filename: int(float(shell_exec(f"aubio tempo {filename}").replace(" bpm", "")))
-
-# Method used by arrow vortex to get offset and bpm. Use this eventually
+# Method used by arrow vortex to get offset and bpm
 def vortex_cli(filename: str) -> tuple[float, float]: 
 	output = shell_exec(f'../FindTempo_standalone {filename}')
 	words = output.split()
@@ -36,11 +32,11 @@ def onset(
 	hop_size: int = 512
 ) -> NDIntArray:
 	if method not in ONSET_METHODS:
-		raise ValueError("`method` is not a valid onset method")
+		raise ValueError(f"{method} is not a valid onset method")
 	s = aubio.source(filename) # type: ignore
 	o = aubio.onset(method, fft_size, hop_size) # type: ignore
 	onsets: list[int] = []
-	read = math.inf
+	read = 1
 	while read > 0:
 		samples, read = s()
 		if o(samples):

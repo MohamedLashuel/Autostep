@@ -11,7 +11,7 @@ def main():
 	os.chdir(args.output)
 
 	new_audio_file = f'{audio_file_name}.ogg'
-	if audio_file_ext == '.ogg':
+	if audio_file_ext in ['.ogg', '.wav']:
 		os.popen(f'cp ../{args.audio_file} .')
 	else:
 		better_aubio.shell_exec(f'ffmpeg -i ../{args.audio_file} {new_audio_file}')
@@ -30,15 +30,7 @@ def main():
 		if args.bpm is None: args.bpm = bpm
 		if args.offset is None: args.offset = offset
 
-	match args.sample2note_method:
-		case "default":
-			onsets_sixteenth_notes = util.sample2note(onsets, samplerate, args.bpm, args.division)
-		case "round":
-			onsets_sixteenth_notes = util.sample2note_round(onsets, samplerate, args.bpm, args.division)
-		case "offset":
-			onsets_sixteenth_notes = util.sample2note_offset(onsets, samplerate, args.bpm, args.offset, args.division)
-		case "round+offset":
-			onsets_sixteenth_notes = util.sample2note_round_offset(onsets, samplerate, args.bpm, args.offset, args.division)
+	onsets_sixteenth_notes = util.sample2note(onsets, samplerate, args.bpm, args.offset, args.division)
 
 	util.make_chart_code(onsets_sixteenth_notes, 16, args.code_file) # type: ignore
 	autochart.inout.convertToSSC(args.code_file, args.chart_file)

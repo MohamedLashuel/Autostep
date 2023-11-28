@@ -20,17 +20,7 @@ audio: NDFloatArray
 audio: NDFloatArray
 ```
 """
-
-sample2note = lambda sample, samplerate, tempo, note_division = 16: \
-	np.int_((sample / samplerate) / 60 * tempo * note_division / 4)
-
-sample2note_round = lambda sample, samplerate, tempo, note_division = 16: \
-	np.int_(np.round((sample / samplerate) / 60 * tempo * note_division / 4))
-
-sample2note_offset = lambda sample, samplerate, tempo, offset = 0, note_division = 16: \
-	np.int_((sample / samplerate + offset) / 60 * tempo * note_division / 4)
-
-sample2note_round_offset = lambda sample, samplerate, tempo, offset = 0, note_division = 16: \
+sample2note = lambda sample, samplerate, tempo, offset = 0, note_division = 16: \
 	np.int_(np.round((sample / samplerate + offset) / 60 * tempo * note_division / 4))
 """
 Converts a sample number to a note number of a certain division.
