@@ -52,28 +52,6 @@ sample: NDFloatArray | float
 ```
 """
 
-def cutoff_samples(
-	samples: NDFloatArray,
-	cutoff_threshold: float
-) -> NDFloatArray:
-	"""
-	Returns a copy of `samples` where every `sample` is zero if `|sample| < cutoff_threshold`.
-
-	Requires that `len(samples.shape) == 1` (one-dimensional).
-
-	## Returns
-	```
-	samples: NDFloatArray
-	```
-	"""
-	if len(samples.shape) != 1:
-		raise ValueError("`samples` is not a 1D array")
-	samples = samples.copy()
-	for i in range(samples.shape[0]):
-		if abs(samples[i]) < cutoff_threshold:
-			samples[i] = 0
-	return samples
-
 def highest_index(s: str, target: str) -> int:
 	"""
 	Find the highest index in which `target` occurs in `s`.

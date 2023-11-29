@@ -7,17 +7,13 @@ import numpy as np
 import aubio
 import subprocess
 
-shell_exec: Callable[[str], str]
-shell_exec = lambda command: subprocess.check_output(command, shell=True, text=True)
-
 # Method used by arrow vortex to get offset and bpm
-def vortex_cli(filename: str) -> tuple[float, float]: 
-	output = shell_exec(f'../FindTempo_standalone {filename}')
+def vortex_cli(filename: str) -> tuple[float, float]:
+	output = subprocess.check_output(("./FindTempo_standalone", filename))
 	words = output.split()
 	bpm = float(words[21])
 	# Program returns time of first onset, offset is negative that
 	offset = -float(words[25])
-
 	return bpm, offset
 
 ONSET_METHODS = ("default", "energy", "hfc", "complex", "phase", "specdiff", "kl", "mkl", "specflux")

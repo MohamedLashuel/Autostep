@@ -1,28 +1,24 @@
+import subprocess
 import better_aubio, cmdline, ssc, util, os
 import soundfile as sf
 import autochart.inout
 
 def main():
 	args = cmdline.arg_parser.parse_args()
-
 	drums_path, audio_file_name, audio_file_ext = util.separate_drums(args.audio_file)
 
-	os.mkdir(args.output)
-	os.chdir(args.output)
+	if args.output_dir != ".":
+		os.mkdir(args.output_dir)
 
-	new_audio_file = f'{audio_file_name}.ogg'
-	if audio_file_ext == '.ogg':
-		os.popen(f'cp ../{args.audio_file} .')
+	# TODO: Figure out which extensions need correcting
+	if audio_file_ext == ".mp3" and args.output_dir != ".":
+		subprocess.run(("cp", args.audio_file, args.output_dir))
 	else:
-		better_aubio.shell_exec(f'ffmpeg -i ../{args.audio_file} {new_audio_file}')
-	
-	args.audio_file = new_audio_file
-	drums_path = f'../{drums_path}'
-	args.code_file = f'../{args.code_file}'
-	args.chart_file = f'../{args.chart_file}'
+		new_audio_file = audio_file_name + ".ogg"
+		subprocess.run(("ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", args.audio_file, f"{args.output_dir}/{new_audio_file}"))
+		args.audio_file = new_audio_file
 	
 	samplerate = sf.info(drums_path).samplerate
-
 	onsets = better_aubio.onset(drums_path, args.onset_method)
 
 	if args.bpm is None or args.offset is None:
@@ -30,13 +26,14 @@ def main():
 		if args.bpm is None: args.bpm = bpm
 		if args.offset is None: args.offset = offset
 
-	onsets_sixteenth_notes = util.sample2note(onsets, samplerate, args.bpm, args.offset, args.division)
+	onsets_notes = util.sample2note(onsets, samplerate, args.bpm, args.offset, args.division)
 
-	util.make_chart_code(onsets_sixteenth_notes, 16, args.code_file) # type: ignore
+	util.make_chart_code(onsets_notes, 16, args.code_file) # type: ignore
 	autochart.inout.convertToSSC(args.code_file, args.chart_file)
 
-	ssc.write(args.audio_file, args.bpm, args.offset, 1, 0, args.chart_file, f'{audio_file_name}.ssc')
-	autochart.inout.injectSSCToChart(args.chart_file, f'{audio_file_name}.ssc', 1)
+	ssc_path = f"{args.output_dir}/{audio_file_name}.ssc"
+	ssc.write(args.audio_file, args.bpm, args.offset, 1, 0, args.chart_file, ssc_path)
+	autochart.inout.injectSSCToChart(args.chart_file, ssc_path, 1)
 
 # Call main() ONLY when this module is EXECUTED and not IMPORTED.
 if __name__ == "__main__":

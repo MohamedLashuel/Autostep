@@ -1,6 +1,21 @@
 # Autostep
 A Python program that turns music into StepMania/ITGmania charts.
 
+## Usage
+
+### Creating a chart
+To create a chart using audio, run:
+```sh
+autostep audio.mp3
+```
+This will create `audio.ssc` in the current directory, along with `audio.ogg` (the same audio encoded in Ogg Vorbis). If your input audio is already a `.ogg` or `.wav` file, additional encoding will not occur.
+
+You can specify a directory to output these files:
+```sh
+autostep audio.mp3 --output-dir song_dir
+```
+Both `audio.ssc` and `audio.ogg` will be created in `song_dir`.
+
 ## Installation
 ```sh
 pip install autostep
