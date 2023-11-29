@@ -11,7 +11,7 @@ def main():
 	os.chdir(args.output)
 
 	new_audio_file = f'{audio_file_name}.ogg'
-	if audio_file_ext in ['.ogg', '.wav']:
+	if audio_file_ext == '.ogg':
 		os.popen(f'cp ../{args.audio_file} .')
 	else:
 		better_aubio.shell_exec(f'ffmpeg -i ../{args.audio_file} {new_audio_file}')
