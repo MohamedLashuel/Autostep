@@ -10,8 +10,7 @@ def main():
 	if args.output_dir != ".":
 		os.mkdir(args.output_dir)
 
-	# TODO: Figure out which extensions need correcting
-	if audio_file_ext == ".mp3" and args.output_dir != ".":
+	if audio_file_ext == ".ogg" and args.output_dir != ".":
 		subprocess.run(("cp", args.audio_file, args.output_dir))
 	else:
 		new_audio_file = audio_file_name + ".ogg"
