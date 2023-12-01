@@ -50,6 +50,14 @@ ADVANCED_OPTS = {
 	"--chart_file": {
 		"default": "/tmp/autostep.ssc.notes",
 		"help": "Where to store the SSC notes"
+	},
+	"--separated_path": {
+		"default": "separated",
+		"help": "Where to store separated audio"
+	},
+	"--force_separate": {
+		"action": "store_true",
+		"help": "Force separation of audio stems even if separated audio already exists"
 	}
 }
 
