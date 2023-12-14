@@ -1,4 +1,5 @@
-# In order to run tests, just do python tests.py from the project directory (the same directory this file is in)
+# In order to run tests, just do python tests.py from the project 
+# directory (the same directory this file is in)
 
 import os, sys, shutil
 
@@ -32,15 +33,15 @@ runProg('test_audio/TOTL.ogg --output_dir TOTL')
 
 runProg('test_audio/TOTL.ogg --output_dir TOTL2')
 
-# Forcing
+# Forcing overwrite
 try:
     runProg('test_audio/TOTL.ogg --output_dir TOTL')
-# If we don't force, program should quit() with code 1
+## If we don't force, program should quit() with code 1
 except SystemExit as e:
     assert e.code == 1 
 
 try:
-    runProg('test_audio/TOTL.ogg --output_dir TOTL --force')
+    runProg('test_audio/TOTL.ogg --output_dir TOTL --force_overwrite')
 except SystemExit as e:
     raise Exception('Forced folder overwrite failed to run')
 

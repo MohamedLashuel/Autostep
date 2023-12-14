@@ -10,7 +10,7 @@ def main():
 	args = cmdline.arg_parser.parse_args()
 	drums_path, audio_file_name, audio_file_ext = util.separate_drums(args.audio_file, sep_path=args.separated_path, force=args.force_separate)
 
-	makeOutDirectory(args.output_dir, args.force)
+	makeOutDirectory(args.output_dir, args.force_overwrite)
 
 	# Even if it's already ogg, we need to remove the path at the start
 	new_audio_file = audio_file_name + ".ogg"
@@ -41,7 +41,7 @@ def makeOutDirectory(dir: str, force: bool) -> None:
 			print(f"Deleting directory {dir}")
 			shutil.rmtree(dir)
 		else:
-			print("Folder already exists. Use a different folder, delete it, or use the --force option")
+			print("Folder already exists. Use a different folder, delete it, or use the --force_overwrite option")
 			quit(1)
 	os.mkdir(dir)
 
