@@ -1,8 +1,12 @@
-import better_aubio
+try:
+	import better_aubio
+except ModuleNotFoundError:
+	from autostep import better_aubio
+
 from typing import Any
 import argparse
 
-arg_parser = argparse.ArgumentParser(description="Generate an ITGMania chart (.ssc) from an audio file containing music.")
+arg_parser = argparse.ArgumentParser(description="Generate a Stepmania chart (.ssc) from an audio file containing music.")
 
 # the inner dicts conform to ArgumentParser.add_argument's keyword args
 ARGUMENTS: dict[str, dict[str, Any]] = {
@@ -44,12 +48,17 @@ ADVANCED_OPTS = {
 		"help": "The onset (beat) detection method to use"
 	},
 	"--code_file": {
-		"default": "/tmp/autostep.ac",
+		"default": "code.txt",
 		"help": "Where to store the Autochart code"
 	},
 	"--chart_file": {
-		"default": "/tmp/autostep.ssc.notes",
+		"default": "chart.txt",
 		"help": "Where to store the SSC notes"
+	},
+	"--force": {
+		"action": "store_true",
+		"default": False,
+		"help": "If directory already exists, overwrite it"
 	}
 }
 
