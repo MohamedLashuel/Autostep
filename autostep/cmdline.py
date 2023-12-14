@@ -55,10 +55,24 @@ ADVANCED_OPTS = {
 		"default": "chart.txt",
 		"help": "Where to store the SSC notes"
 	},
+	"--separated_path": {
+		"default": "separated",
+		"help": "Where to store separated audio"
+	},
+<<<<<<< HEAD
 	"--force": {
 		"action": "store_true",
 		"default": False,
 		"help": "If directory already exists, overwrite it"
+=======
+	"--separated_path": {
+		"default": "separated",
+		"help": "Where to store separated audio"
+	},
+	"--force_separate": {
+		"action": "store_true",
+		"help": "Force separation of audio stems even if separated audio already exists"
+>>>>>>> 92052e177f1ef188ace3c2f8774c6d8469c3ec0a
 	}
 }
 

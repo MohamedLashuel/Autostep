@@ -8,7 +8,7 @@ import autochart.inout
 
 def main():
 	args = cmdline.arg_parser.parse_args()
-	drums_path, audio_file_name, audio_file_ext = util.separate_drums(args.audio_file)
+	drums_path, audio_file_name, audio_file_ext = util.separate_drums(args.audio_file, sep_path=args.separated_path, force=args.force_separate)
 
 	makeOutDirectory(args.output_dir, args.force)
 
