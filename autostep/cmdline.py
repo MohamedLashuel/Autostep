@@ -63,10 +63,10 @@ ADVANCED_OPTS = {
 		"default": "separated",
 		"help": "Where to store separated audio"
 	},
-	"--force_overwrite": {
+	"--overwrite": {
 		"default": False,
 		"action": "store_true",
-		"help": "Force separation of audio stems even if separated audio already exists"
+		"help": "Force overwriting of output directory even if it already exists"
 	},
 	"--force_separate": {
 		"default": False,

@@ -21,29 +21,30 @@ def tryDelete(*paths):
 
     for path in paths: tryDeleteOne(path)
 
-# Setup
-tryDelete('chart.txt', 'code.txt', 'TOTL.ogg, TOTL.ssc')
+def tests():
+    # Setup
+    tryDelete('chart.txt', 'code.txt', 'TOTL.ogg', 'TOTL.ssc',
+            'TOTL', 'TOTL2', 'separated/TOTL')
 
-# With and without separation
-tryDelete('TOTL', 'TOTL2')
-
-if os.path.exists('separated/TOTL'):
-    shutil.rmtree('separated/TOTL')
-runProg('test_audio/TOTL.ogg --output_dir TOTL')
-
-runProg('test_audio/TOTL.ogg --output_dir TOTL2')
-
-# Forcing overwrite
-try:
+    # With and without separation
     runProg('test_audio/TOTL.ogg --output_dir TOTL')
-## If we don't force, program should quit() with code 1
-except SystemExit as e:
-    assert e.code == 1 
 
-try:
-    runProg('test_audio/TOTL.ogg --output_dir TOTL --force_overwrite')
-except SystemExit as e:
-    raise Exception('Forced folder overwrite failed to run')
+    runProg('test_audio/TOTL.ogg --output_dir TOTL2')
 
-# Output dir here
-runProg('test_audio/TOTL.ogg')
+    # Forcing overwrite
+    try:
+        runProg('test_audio/TOTL.ogg --output_dir TOTL')
+    ## If we don't force, program should quit() with code 1
+    except SystemExit as e:
+        assert e.code == 1 
+
+    try:
+        runProg('test_audio/TOTL.ogg --output_dir TOTL --overwrite')
+    except SystemExit as e:
+        raise Exception('Forced folder overwrite failed to run')
+
+    # Output dir here
+    runProg('test_audio/TOTL.ogg')
+
+if __name__ == "__main__":
+    tests()

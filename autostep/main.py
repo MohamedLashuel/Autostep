@@ -10,7 +10,7 @@ def main():
 	args = cmdline.arg_parser.parse_args()
 	drums_path, audio_file_name, audio_file_ext = util.separate_drums(args.audio_file, sep_path=args.separated_path, force=args.force_separate)
 
-	makeOutDirectory(args.output_dir, args.force_overwrite)
+	makeOutDirectory(args.output_dir, args.overwrite)
 
 	# Even if it's already ogg, we need to remove the path at the start
 	new_audio_file = audio_file_name + ".ogg"
@@ -20,13 +20,13 @@ def main():
 	args.audio_file = new_audio_file
 	
 	samplerate = sf.info(drums_path).samplerate
-	onsets = better_aubio.onset(drums_path, args.onset_method)
-
 	bpm, offset = getBpmOffset(args, drums_path)
+
+	onsets = better_aubio.onset(drums_path, args.onset_method)
 
 	onsets_notes = util.sample2note(onsets, samplerate, bpm, offset, args.division)
 
-	util.make_chart_code(onsets_notes, 16, args.code_file) # type: ignore
+	util.make_chart_code(onsets_notes, args.division, args.code_file) # type: ignore
 	autochart.inout.convertToSSC(args.code_file, args.chart_file)
 
 	ssc_path = f"{args.output_dir}/{audio_file_name}.ssc"
@@ -41,7 +41,7 @@ def makeOutDirectory(dir: str, force: bool) -> None:
 			print(f"Deleting directory {dir}")
 			shutil.rmtree(dir)
 		else:
-			print("Folder already exists. Use a different folder, delete it, or use the --force_overwrite option")
+			print("Folder already exists. Use a different folder, delete it, or use the --overwrite option")
 			quit(1)
 	os.mkdir(dir)
 
